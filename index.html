@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ROCKET PIZZA</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="container">
+    <header>
+      <h1>ROCKET PIZZA</h1>
+      <p class="intro">Pedidos para Humanos y Aliens.</p>
+    </header>
+
+    <section id="intro-screen" class="screen active">
+      <div class="card">
+        <h2>HOLA 👋</h2>
+        <p>Elige tu especie para continuar.</p>
+        <div class="button-grid">
+          <button class="big-button" data-species="humano"><span class="icon-large">👩🏻‍🤝‍👨🏼</span><span class="button-text">Humanos</span></button>
+          <button class="big-button" data-species="alien"><span class="icon-large">👽</span><span class="button-text">Alien Zogtoniano</span></button>
+        </div>
+      </div>
+    </section>
+
+    <section id="menu-screen" class="screen">
+      <div class="card">
+        <div class="section-header">
+          <h2>Seleccionar pizza</h2>
+          <span id="discount-label" class="label">Descuento Alien: 50%</span>
+        </div>
+        <p id="menu-target-text" class="target-text">Pizza sabrosa y caliente.</p>
+
+        <div class="size-section">
+          <h3>Elegir tamaño</h3>
+          <div class="size-grid">
+            <button class="big-button size-button size-small" data-size="Chica" data-price="80"><span class="icon-large">🍕</span><span class="button-text">Chica</span></button>
+            <button class="big-button size-button size-medium" data-size="Mediana" data-price="100"><span class="icon-large">🍕</span><span class="button-text">Mediana</span></button>
+            <button class="big-button size-button size-large" data-size="Grande" data-price="120"><span class="icon-large">🍕</span><span class="button-text">Grande</span></button>
+            <button class="big-button size-button size-xlarge" data-size="Familiar" data-price="150"><span class="icon-large">🍕</span><span class="button-text">Familiar</span></button>
+          </div>
+          <p class="size-note">El botón más grande representa una pizza más grande y más energía.</p>
+          <p id="size-choice" class="payment-choice">Tamaño seleccionado: ninguno</p>
+        </div>
+
+        <div class="button-grid">
+          <button class="big-button menu-button" data-name="Queso Lunar" data-price="100"><span class="icon-large">🧀</span><span class="button-text">Queso Lunar</span></button>
+          <button class="big-button menu-button" data-name="Pepperoni Espacial" data-price="130" data-forbidden="true"><span class="icon-large">🚫</span><span class="button-text">Pepperoni Espacial</span></button>
+          <button class="big-button menu-button" data-name="Roca Espacial" data-price="140"><span class="icon-large">🪨</span><span class="button-text">Roca Espacial</span></button>
+          <button class="big-button menu-button" data-name="Aceitunas" data-price="90" data-forbidden="true"><span class="icon-large">🚫</span><span class="button-text">Aceitunas</span></button>
+          <button class="big-button menu-button" data-name="Bebida Metano" data-price="120"><span class="icon-large">🛢️</span><span class="button-text">Bebida Metano</span></button>
+          <button class="big-button menu-button" data-name="Salsa Solar" data-price="80"><span class="icon-large">🌶️</span><span class="button-text">Salsa Solar</span></button>
+        </div>
+
+        <div class="order-panel">
+          <h3>Pedido pendiente</h3>
+          <ul id="order-list" class="order-list" aria-live="polite"></ul>
+          <p class="order-total">Total: <span id="order-total">0</span> créditos</p>
+          <div class="footer-actions">
+            <button class="big-button secondary" id="go-checkout"><span class="icon-large">🛒</span><span class="button-text">Ir al check-out</span></button>
+            <button class="big-button secondary" id="reset-order"><span class="icon-large">♻️</span><span class="button-text">Reiniciar pedido</span></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="checkout-screen" class="screen">
+      <div class="card">
+        <h2>Revisar pedido</h2>
+        <p>No dependemos solo del color. Si falta información, verás un mensaje grande con ERROR.</p>
+
+        <ul id="checkout-list" class="order-list"></ul>
+        <p class="order-total">Total final: <span id="checkout-total">0</span> créditos</p>
+
+        <div class="payment-section">
+          <h3>Elegir método de pago</h3>
+          <div class="button-grid">
+            <button class="big-button payment-button" data-method="Tarjeta Digital"><span class="icon-large">💳</span><span class="button-text">Tarjeta Digital</span></button>
+            <button class="big-button payment-button" data-method="Crédito Lunar"><span class="icon-large">🪙</span><span class="button-text">Crédito Lunar</span></button>
+            <button class="big-button payment-button" data-method="Moneda Intergaláctica"><span class="icon-large">🛸</span><span class="button-text">Moneda Intergaláctica</span></button>
+          </div>
+          <p id="payment-choice" class="payment-choice">Método de pago: ninguno seleccionado</p>
+        </div>
+
+        <div id="error-box" class="message-box hidden" role="alert">
+          <span class="message-icon">⚠</span>
+          <span id="error-text">ERROR</span>
+        </div>
+
+        <div class="footer-actions">
+          <button class="big-button" id="confirm-order"><span class="icon-large">✅</span><span class="button-text">Confirmar Pedido</span></button>
+          <button class="big-button secondary" id="back-to-menu"><span class="icon-large">✏️</span><span class="button-text">Editar Pedido</span></button>
+        </div>
+      </div>
+    </section>
+
+    <section id="confirmation-screen" class="screen">
+      <div class="card">
+        <h2>Pedido enviado</h2>
+        <p>Tu pedido está confirmado. Gracias por usar Rocket Pizza.</p>
+        <p id="confirmation-detail"></p>
+        <button class="big-button" id="new-order"><span class="icon-large">🔄</span><span class="button-text">Nuevo pedido</span></button>
+      </div>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
