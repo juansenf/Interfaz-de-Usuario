@@ -209,22 +209,49 @@ h1 {
 .modal-content {
   background: #ffff00;
   color: #000000;
-  padding: 20px;
+  padding: 28px 24px 24px;
   border-radius: 18px;
   text-align: center;
-  max-width: 300px;
-  width: 90%;
+  max-width: 380px;
+  width: min(92%, 380px);
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.4;
+  position: relative;
 }
 
-.modal-content button {
-  margin-top: 15px;
-  background: #000000;
-  color: #ffff00;
+#modal-text {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+#modal-close.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
   border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.18);
+  color: #000000;
+  font-size: 1.3rem;
+  line-height: 1;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
   font-weight: 700;
+}
+
+#modal-close.modal-close:hover,
+#modal-close.modal-close:focus {
+  background: rgba(0, 0, 0, 0.28);
+  outline: 2px solid rgba(255, 255, 255, 0.9);
+  outline-offset: 2px;
 }
 
 
