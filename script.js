@@ -13,9 +13,17 @@ const menuTargetText = document.getElementById('menu-target-text');
 const sizeChoice = document.getElementById('size-choice');
 const errorBox = document.getElementById('error-box');
 const errorText = document.getElementById('error-text');
+const feedbackBox = document.getElementById('feedback-box');
+const feedbackText = document.getElementById('feedback-text');
 const confirmationDetail = document.getElementById('confirmation-detail');
 const discountLabel = document.getElementById('discount-label');
 const sizeButtons = document.querySelectorAll('.size-button');
+const optionGrid = document.getElementById('option-grid');
+const powerupLegend = document.getElementById('powerup-legend');
+const modal = document.getElementById('modal');
+const modalText = document.getElementById('modal-text');
+const modalClose = document.getElementById('modal-close');
+const ingredientsLegend = document.getElementById('ingredients-legend');
 
 const sizePrices = {
   Chica: 80,
@@ -24,7 +32,31 @@ const sizePrices = {
   Familiar: 150
 };
 
-const alienForbidden = ['Pepperoni Espacial', 'Aceitunas'];
+const humanOptions = [
+  { name: 'Queso Muzzarella', price: 100, forbidden: false, icon: '🧀' },
+  { name: 'Pepperoni', price: 130, forbidden: true, icon: '🫘' },
+  { name: 'Provolone', price: 140, forbidden: false, icon: '🧀' },
+  { name: 'Aceitunas', price: 90, forbidden: true, icon: '🫒' },
+  { name: 'Bacon', price: 120, forbidden: false, icon: '🥓️' },
+  { name: 'Morrón', price: 80, forbidden: false, icon: '🌶️' }
+];
+
+const alienBenefits = [
+  { name: 'Recuperá 30% de energía celular en 15 minutos.', price: 50, forbidden: false, icon: '⚡' },
+  { name: 'Recuperá 50% de energía celular en 30 minutos.', price: 70, forbidden: false, icon: '✨' },
+  { name: 'Recuperá 80% de energía celular en 45 minutos.', price: 100, forbidden: false, icon: '🌌' }
+];
+
+const alienOptions = [
+  { name: 'Roca Espacial', price: 140, forbidden: false, icon: '🪨' },
+  { name: 'Bebida Metano', price: 120, forbidden: false, icon: '🛢️' },
+  { name: 'Pepperoni', price: 130, forbidden: true, icon: '🫘' },
+  { name: 'Aceitunas', price: 90, forbidden: true, icon: '🫒' },
+  { name: 'Salsa Solar', price: 80, forbidden: false, icon: '🌶️' }
+];
+
+const alienForbidden = ['Pepperoni', 'Aceitunas'];
+
 
 let orderItems = [];
 let selectedPayment = null;
@@ -39,9 +71,13 @@ function showScreen(name) {
 }
 
 function updateMenuTargetText() {
-  menuTargetText.textContent = species === 'alien'
-    ? 'Recuperá energía celular en 30 minutos.'
-    : 'Pizza sabrosa y caliente.';
+  if (species === 'alien') {
+    menuTargetText.textContent = 'Recuperá energía celular.';
+    discountLabel.textContent = 'Beneficio Alien: 50% OFF';
+  } else {
+    menuTargetText.textContent = 'Pizza sabrosa y caliente.';
+    discountLabel.textContent = 'Descuento Alien: 50%';
+  }
 }
 
 function setSpecies(value) {
@@ -49,6 +85,13 @@ function setSpecies(value) {
   discount = value === 'alien' ? 0.5 : 1;
   discountLabel.style.display = value === 'alien' ? 'inline-block' : 'none';
   updateMenuTargetText();
+  hideError();
+  if (value === 'alien') {
+    powerupLegend.classList.remove('hidden');
+  } else {
+    powerupLegend.classList.add('hidden');
+  }
+  renderOptions();
   showScreen('menu');
 }
 
@@ -133,6 +176,24 @@ function hideError() {
   errorBox.classList.add('hidden');
 }
 
+function showFeedback(message) {
+  feedbackText.textContent = message;
+  feedbackBox.classList.remove('hidden');
+}
+
+function hideFeedback() {
+  feedbackBox.classList.add('hidden');
+}
+
+function showModal(message) {
+  modalText.textContent = message;
+  modal.classList.remove('hidden');
+}
+
+function hideModal() {
+  modal.classList.add('hidden');
+}
+
 function flashForbidden(button) {
   if (!button) return;
   button.classList.add('forbidden');
@@ -144,14 +205,71 @@ function addItem(name, price, forbidden, button) {
     showError('elige el tamaño de pizza primero');
     return;
   }
+  hideError();
+  hideFeedback();
+
   if (species === 'alien' && forbidden) {
-    showError('ingrediente prohibido para tu especie');
+    showModal('ERROR: INGREDIENTE PROHIBIDO');
     flashForbidden(button);
     return;
   }
   orderItems.push({ name, price });
   updateOrderDisplay();
 }
+
+function renderOptions() {
+  optionGrid.innerHTML = '';
+
+  if (species === 'alien') {
+    // Botones de beneficios
+    alienBenefits.forEach((option) => {
+      const button = document.createElement('button');
+      button.className = 'big-button menu-button';
+      button.dataset.name = option.name;
+      button.dataset.price = option.price;
+      if (option.forbidden) button.dataset.forbidden = 'true';
+      button.innerHTML = `<span class="icon-large">${option.icon}</span><span class="button-text">${option.name}</span>`;
+      optionGrid.appendChild(button);
+    });
+
+    // Leyenda para Ingredientes
+    const ingredientsLegend = document.createElement('h3');
+    ingredientsLegend.textContent = 'Sumá Ingredientes';
+    ingredientsLegend.className = 'legend';
+    optionGrid.appendChild(ingredientsLegend);
+
+    // Botones de opciones alien
+    alienOptions.forEach((option) => {
+      const button = document.createElement('button');
+      button.className = 'big-button menu-button';
+      button.dataset.name = option.name;
+      button.dataset.price = option.price;
+      if (option.forbidden) button.dataset.forbidden = 'true';
+      button.innerHTML = `<span class="icon-large">${option.icon}</span><span class="button-text">${option.name}</span>`;
+      optionGrid.appendChild(button);
+    });
+  } else {
+    // Leyenda para Ingredientes
+    const ingredientsLegend = document.createElement('h3');
+    ingredientsLegend.textContent = 'Sumá Ingredientes';
+    ingredientsLegend.className = 'legend';
+    optionGrid.appendChild(ingredientsLegend);
+
+    // Botones de opciones humanas
+    humanOptions.forEach((option) => {
+      const button = document.createElement('button');
+      button.className = 'big-button menu-button';
+      button.dataset.name = option.name;
+      button.dataset.price = option.price;
+      if (option.forbidden) button.dataset.forbidden = 'true';
+      button.innerHTML = `<span class="icon-large">${option.icon}</span><span class="button-text">${option.name}</span>`;
+      optionGrid.appendChild(button);
+    });
+  }
+}
+
+
+
 
 function removeItem(index) {
   orderItems.splice(index, 1);
@@ -168,6 +286,8 @@ function resetOrder() {
   sizeButtons.forEach((button) => button.classList.remove('selected'));
   updateMenuTargetText();
   hideError();
+  hideFeedback();
+  renderOptions();
   updateOrderDisplay();
 }
 
@@ -204,8 +324,10 @@ function setupEventListeners() {
     button.addEventListener('click', () => selectSize(button.dataset.size, Number(button.dataset.price), button));
   });
 
-  document.querySelectorAll('.menu-button').forEach((button) => {
-    button.addEventListener('click', () => addItem(button.dataset.name, Number(button.dataset.price), button.dataset.forbidden === 'true', button));
+  optionGrid.addEventListener('click', (event) => {
+    const button = event.target.closest('button');
+    if (!button) return;
+    addItem(button.dataset.name, Number(button.dataset.price), button.dataset.forbidden === 'true', button);
   });
 
   orderList.addEventListener('click', (event) => {
@@ -237,6 +359,8 @@ function setupEventListeners() {
     hideError();
     showScreen('menu');
   });
+
+  modalClose.addEventListener('click', hideModal);
 
   document.getElementById('confirm-order').addEventListener('click', confirmOrder);
   document.getElementById('new-order').addEventListener('click', () => {
